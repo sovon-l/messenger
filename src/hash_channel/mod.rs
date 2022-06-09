@@ -42,7 +42,12 @@ pub struct HashChannelReceiver<R> {
     pub receivers: Vec<R>,
 }
 
-pub fn new_hash_channel<M, S, R, C>(n: usize) -> (HashChannelSender<S>, HashChannelReceiver<R>)
+// This is better and sound function signature but requires https://github.com/rust-lang/rust/issues/52662
+// pub fn new_hash_channel<M, C>(n: usize) -> (HashChannelSender<C::Sender>, HashChannelReceiver<C::Receiver>)
+// where
+//     M: Hash + Send,
+//     C: Channel<M, Sender: ChannelSender<Message = M>, Receiver: ChannelReceiver<Message = M>>,
+pub fn new_hash_channel<M, S, R, C>(n: usize) -> (HashChannelSender<C::Sender>, HashChannelReceiver<C::Receiver>)
 where
     M: Hash + Send,
     S: ChannelSender<Message = M>,
