@@ -2,6 +2,9 @@ pub mod crossbeam;
 
 use std::hash::Hash;
 
+// ----------------------
+// requirements to be inner channel of a hashed channel
+
 pub trait Channel<M: Send> {
     type Sender: ChannelSender<Message = M>;
     type Receiver: ChannelReceiver<Message = M>;
@@ -36,19 +39,16 @@ impl<M: Hash, S: ChannelSender<Message = M>> HashChannelSender<S> {
 }
 
 pub struct HashChannelReceiver<R> {
-    receivers: Vec<R>,
+    pub receivers: Vec<R>,
 }
 
-pub fn new<
-    M: Hash + Send, 
+pub fn new_hash_channel<M, S, R, C>(n: usize) -> (HashChannelSender<S>, HashChannelReceiver<R>)
+where
+    M: Hash + Send,
     S: ChannelSender<Message = M>,
     R: ChannelReceiver<Message = M>,
-    C: Channel<
-        M,
-        Sender = S,
-        Receiver = R,
-    >,
->(n: usize) -> (HashChannelSender<S>, HashChannelReceiver<R>) {
+    C: Channel<M, Sender = S, Receiver = R>,
+{
     let mut senders = vec![];
     let mut receivers = vec![];
     for _ in 0..n {
@@ -61,3 +61,26 @@ pub fn new<
         HashChannelReceiver { receivers },
     )
 }
+
+// pub fn new_hash_channel<
+//     M: Hash + Send,
+//     S: ChannelSender<Message = M>,
+//     R: ChannelReceiver<Message = M>,
+//     C: Channel<
+//         M,
+//         Sender = S,
+//         Receiver = R,
+//     >,
+// >(n: usize) -> (HashChannelSender<S>, HashChannelReceiver<R>) {
+//     let mut senders = vec![];
+//     let mut receivers = vec![];
+//     for _ in 0..n {
+//         let (tx, rx) = C::new();
+//         senders.push(tx);
+//         receivers.push(rx);
+//     }
+//     (
+//         HashChannelSender { senders },
+//         HashChannelReceiver { receivers },
+//     )
+// }

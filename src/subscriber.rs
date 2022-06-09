@@ -1,4 +1,3 @@
-
 pub trait Listener<M> {
     fn on_msg(&mut self, msg: M);
 }
@@ -8,10 +7,7 @@ pub trait Subscriber<M> {
     fn recv(&mut self) -> Option<M>;
 }
 
-pub fn subscriber_loop<M>(
-    mut subscriber: impl Subscriber<M>,
-    mut listener: impl Listener<M>,
-) {
+pub fn subscriber_loop<M>(mut subscriber: impl Subscriber<M>, mut listener: impl Listener<M>) {
     subscriber.init();
     while let Some(msg) = subscriber.recv() {
         listener.on_msg(msg);
@@ -36,7 +32,6 @@ impl<M> Subscriber<M> for CrossbeamSubscriber<M> {
                 );
                 None
             }
-
         }
     }
 }

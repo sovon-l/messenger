@@ -1,12 +1,8 @@
-
 pub trait Publisher<M> {
     fn publish(&mut self, msg: M);
 }
 
-pub fn publisher_loop<M>(
-    rcv: crossbeam_channel::Receiver<M>,
-    mut publisher: impl Publisher<M>,
-){
+pub fn publisher_loop<M>(rcv: crossbeam_channel::Receiver<M>, mut publisher: impl Publisher<M>) {
     loop {
         match rcv.recv() {
             Ok(msg) => publisher.publish(msg),

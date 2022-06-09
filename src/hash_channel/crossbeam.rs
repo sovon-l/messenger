@@ -20,15 +20,12 @@ impl<M: Send> crate::hash_channel::ChannelReceiver for CrossbeamReceiver<M> {
             Err(e) => {
                 log::error!("{}", e);
                 Err(())
-            },
+            }
         }
     }
 }
 
-pub type CrossbeamChannels<M> = (
-    CrossbeamSender<M>,
-    CrossbeamReceiver<M>,
-);
+pub type CrossbeamChannels<M> = (CrossbeamSender<M>, CrossbeamReceiver<M>);
 
 impl<M: std::hash::Hash + Send> crate::hash_channel::Channel<M> for CrossbeamChannels<M> {
     type Sender = CrossbeamSender<M>;
