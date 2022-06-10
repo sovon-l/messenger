@@ -67,7 +67,7 @@ static MSGS: [&'static str; 63] = [
 pub fn main() {
     let (mut tx, rx) = messenger::hash_channel::new_hash_channel::<
         String,
-        messenger::externals::crossbeam::CrossbeamChannels<String>,
+        messenger::externals::crossbeam::CrossbeamChannels<_>,
     >(8);
 
     let msgs: Vec<String> = MSGS.iter().map(|s| s.to_string()).collect();
