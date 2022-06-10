@@ -67,8 +67,6 @@ static MSGS: [&'static str; 63] = [
 pub fn main() {
     let (mut tx, rx) = messenger::hash_channel::new_hash_channel::<
         String,
-        messenger::externals::crossbeam::Sender<String>,
-        messenger::externals::crossbeam::Receiver<String>,
         messenger::externals::crossbeam::CrossbeamChannels<String>,
     >(8);
 

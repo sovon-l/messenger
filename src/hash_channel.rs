@@ -22,16 +22,12 @@ pub struct HashChannelReceiver<R> {
 }
 
 // This is better and sound function signature but requires https://github.com/rust-lang/rust/issues/52662
-// pub fn new_hash_channel<M, C>(n: usize) -> (HashChannelSender<C::Sender>, HashChannelReceiver<C::Receiver>)
-// where
-//     M: Hash + Send,
-//     C: Channel<M, Sender: ChannelSender<Message = M>, Receiver: ChannelReceiver<Message = M>>,
-pub fn new_hash_channel<M, S, R, C>(n: usize) -> (HashChannelSender<M, C::Sender>, HashChannelReceiver<C::Receiver>)
+pub fn new_hash_channel<M, C>(n: usize) -> (HashChannelSender<M, C::Sender>, HashChannelReceiver<C::Receiver>)
 where
     M: Hash + Send,
-    S: crate::traits::ChannelSender<M>,
-    R: crate::traits::ChannelReceiver<Message = M>,
-    C: crate::traits::Channel<M, Sender = S, Receiver = R>,
+    C: crate::traits::Channel<M>,
+    <C as crate::traits::Channel<M>>::Sender: crate::traits::ChannelSender<M>,
+    <C as crate::traits::Channel<M>>::Receiver: crate::traits::ChannelReceiver<Message = M>,
 {
     let mut senders = vec![];
     let mut receivers = vec![];
