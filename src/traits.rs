@@ -1,7 +1,8 @@
 
-pub trait Channel<M: Send> {
-    type Sender: ChannelSender<M>;
-    type Receiver: ChannelReceiver<Message = M>;
+pub trait Channel {
+    type Message: Send;
+    type Sender: ChannelSender<Self::Message>;
+    type Receiver: ChannelReceiver<Message = Self::Message>;
     fn new() -> (Self::Sender, Self::Receiver);
 }
 

@@ -26,7 +26,8 @@ impl<M: Send> crate::traits::ChannelReceiver for Receiver<M> {
 
 pub type CrossbeamChannels<M> = (Sender<M>, Receiver<M>);
 
-impl<M: std::hash::Hash + Send> crate::traits::Channel<M> for CrossbeamChannels<M> {
+impl<M: Send> crate::traits::Channel for CrossbeamChannels<M> {
+    type Message = M;
     type Sender = Sender<M>;
     type Receiver = crossbeam_channel::Receiver<M>;
     fn new() -> (Self::Sender, Self::Receiver) {
