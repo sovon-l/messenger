@@ -1,3 +1,6 @@
+
+// TODO: merge into crate::traits::ChannelReceiver
+
 pub trait Listener<M> {
     fn on_msg(&mut self, msg: M);
 }

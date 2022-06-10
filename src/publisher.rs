@@ -1,32 +1,16 @@
-pub trait Publisher<M> {
-    fn publish(&mut self, msg: M);
-}
 
-pub fn publisher_loop<M>(rcv: crossbeam_channel::Receiver<M>, mut publisher: impl Publisher<M>) {
+pub fn publisher_loop<M: Send>(
+    mut rcv: impl crate::traits::ChannelReceiver<Message = M>, 
+    mut publisher: impl crate::traits::ChannelSender<M>,
+) {
     loop {
         match rcv.recv() {
-            Ok(msg) => publisher.publish(msg),
-            Err(e) => log::error!("{}", e),
+            Ok(msg) => {
+                let _ = publisher.send(msg);
+            },
+            Err(()) => {
+                log::error!("error: publisher_loop cannot receive msg");
+            },
         }
-    }
-}
-
-// below are implementation examples
-
-// 1. zmq publisher
-pub type ZmqPublisher = zmq::Socket;
-
-impl<M: Into<zmq::Message> + Clone> Publisher<M> for ZmqPublisher {
-    fn publish(&mut self, msg: M) {
-        self.send(&msg, zmq::DONTWAIT).unwrap()
-    }
-}
-
-// 2.bus publisher
-pub type BusPublisher<M> = bus::Bus<M>;
-
-impl<M> Publisher<M> for BusPublisher<M> {
-    fn publish(&mut self, msg: M) {
-        self.broadcast(msg)
     }
 }
