@@ -21,16 +21,24 @@ jobs:
           override: true
           components: rustfmt, rust-src
 
+      - name: Install libzmq3-dev
+        run: |
+          sudo apt install -y libzmq3-dev
+
       - name: Build Documentation
         uses: actions-rs/cargo@v1
         with:
           command: doc
           args: --all --no-deps
-      
+
+      - name: Wrapper for rustdoc to gh-pages
+        run: |
+          echo "<meta http-equiv=\"refresh\" content=\"0; url=messenger\">" > target/doc/index.html
+
       - name: Deploy Documentation
         uses: peaceiris/actions-gh-pages@v3
         with:
-          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: ./target/doc
           keep_files: true
