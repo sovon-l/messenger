@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["messenger"] = [{"text":"impl&lt;M, S&gt; Freeze for <a class=\"struct\" href=\"messenger/hash_channel/struct.HashChannelSender.html\" title=\"struct messenger::hash_channel::HashChannelSender\">HashChannelSender</a>&lt;M, S&gt;","synthetic":true,"types":["messenger::hash_channel::HashChannelSender"]},{"text":"impl&lt;R&gt; Freeze for <a class=\"struct\" href=\"messenger/hash_channel/struct.HashChannelReceiver.html\" title=\"struct messenger::hash_channel::HashChannelReceiver\">HashChannelReceiver</a>&lt;R&gt;","synthetic":true,"types":["messenger::hash_channel::HashChannelReceiver"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
